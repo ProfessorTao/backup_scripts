@@ -5,8 +5,8 @@
 #
 # Author:      taotianyi
 #
-# Created:     31/03/2014
-# Copyright:   (c) baidu 2014
+# Created:     2015/01/06
+# Copyright:   (c) baidu 2015
 # Licence:     <taotianyi01@baidu.com>
 #-------------------------------------------------------------------------------
 

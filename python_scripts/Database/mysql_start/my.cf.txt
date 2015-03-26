@@ -1,0 +1,49 @@
+[mysqld]
+# GENERAL
+basedir=/home/work/local/mysql
+datadir=/home/raid10/data/mysql1/data
+socket=/home/raid10/data/mysql1/data/mysql.sock
+pid_file= /home/raid10/data/mysql1/data/mysql.pid
+user=work
+port=3306
+default_storage_engine=MyISAM
+
+# INNODB
+#innodb_buffer_pool_size=
+#innodb_log_file_szie=
+#innodb_file_per_table=
+#innodb_flush_method=
+#innodb_flush_log_at_trx_commit=1
+ 
+# MyISAM
+key_buffer_size=1G
+# LOGGING
+log-error=/home/raid10/data/mysql1/log/mysql-error.log
+#slow_query_log=on
+#slow_query_log_file=/home/raid10/data/mysql1/log/mysql-slow.log
+
+# OTHER
+tmp_table_size=128M
+max_heap_table_size=128M
+query_cache_type=1
+query_cache_size=512M
+max_connections=1024
+thread_cache_size=20
+table_open_cache=2048
+open_files_limit=65535
+#autocommit=off
+tmpdir=/home/raid10/data/mysql1/tmp
+
+# CHARACTER_SET
+character-set-server=utf8
+character-set-filesystem=utf8
+# Master
+server-id=3
+#log_bin=mysql-bin
+#binlog_format=ROW
+#expire_logs_days=2
+#sync_binlog=1
+
+[client]
+socket=/home/raid10/data/mysql1/data/mysql.sock
+port=3306

@@ -5,7 +5,7 @@
 #
 # Author:      taotianyi
 #
-# Created:     13/10/2014
+# Created:     2014/10/13
 # Copyright:   (c) baidu 2014
 # Licence:     <taotianyi01@baidu.com>
 #-------------------------------------------------------------------------------
@@ -60,6 +60,19 @@ class build_html_table(object):
         table_style_begin, table_sytle_end = DEFAULT_TABLE_STYLE_HTML_STR_BEGIN, DEFAULT_TABLE_STYLE_HTML_STR_END
         html_str = '%s%s%s' % (table_style_begin, table_str_decoreated, table_sytle_end)
         return html_str
+    # end of def
+
+
+    def _add_picture(self, pic_name_in_html, header_str = None):
+        border_str = DEFAULT_TABLE_BORDER_HTML_STR
+        html_picture = ''
+
+        if header_str:
+            html_picture += '<h1>%s</h1>' % header_str
+
+        html_picture += '''<img src="cid:%s">''' % pic_name_in_html
+        html_picture += DEFAULT_TABLE_STYLE_HTML_STR_END
+        return html_picture
     # end of def
 
 

@@ -5,24 +5,26 @@
 #
 # Author:      taotianyi
 #
-# Created:     09/07/2014
-# Copyright:   (c) baidu 2014
+# Created:     2015/01/06
+# Copyright:   (c) baidu 2015
 # Licence:     <taotianyi01@baidu.com>
 #-------------------------------------------------------------------------------
 
 
-THREAD_NUM = 10
+PROCESS_NUM = 10
 
-import threading
-from threading import Thread
+from multiprocessing import Pipe
+from multiprocessing import Process
 
+import main_example
 
 def daily_process_task(date_str):
-    pass
+    main_example.daily_task(date_str)
 # end of def
 
 
-def each_process_task(date_array):
+def each_process_task(child_pipe):
+    date_array = child_pipe.recv()
     for date_str in date_array:
         daily_process_task(date_str)
 # end of def
@@ -36,23 +38,21 @@ def main():
     if 2 == len(sys.argv):
         # 有一个参数时，就使用指定的日期，如果是today, yesterday 就用今天或昨天的日期
         if 'today' == sys.argv[1]:
-            target_date_str = time_func.get_n_day_str(0)
+            target_date_str = time_func.get_n_day_before_str(0)
         elif 'yesterday' == sys.argv[1]:
-            target_date_str = time_func.get_n_day_str(1)
+            target_date_str = time_func.get_n_day_before_str(1)
         elif 'tomorrow' == sys.argv[1]:
-            target_date_str = time_func.get_n_day_str(-1)
+            target_date_str = time_func.get_n_day_before_str(-1)
         else:
             target_date_str = sys.argv[1]
         target_date_list = [target_date_str]
     elif 1 == len(sys.argv):
         # 无参数时，默认使用昨天的数据
-        target_date_str = time_func.get_n_day_str(1)
+        target_date_str = time_func.get_n_day_before_str(1)
         target_date_list = [target_date_str]
     elif 3 == len(sys.argv):
         # 有两个参数时，取两天日期之间的数据
-        date_int_begin = int(sys.argv[1])
-        date_int_end = int(sys.argv[2])
-        target_date_list = time_func.get_day_list_between(date_int_begin, date_int_end)
+        target_date_list = time_func.get_day_list_between_two_datestr(sys.argv[1], sys.argv[2])
     else:
         print "  Error Parameters: "
         for item in sys.argv:
@@ -74,7 +74,7 @@ def main():
     # Build a pipe
     parent_pipe, child_pipe = Pipe()
 
-    thread_list = []
+    process_list = []
     begin, end = 0, 0
     for i in range(process_num):
         begin = end
@@ -90,17 +90,18 @@ def main():
 
         print 'Task No. %d, Date List: ' % i, each_date_list
 
-        each_task = Thread( target=each_process_task, args=(each_date_list, ) )
-        thread_list.append(each_task)
+        parent_pipe.send(each_date_list)
+        each_task = Process( target=each_process_task, args=(child_pipe, ) )
+        process_list.append(each_task)
     # end of for
 
     print 'Number of Process List is %d' % len(process_list)
 
     
-    for each_task in thread_list:
+    for each_task in process_list:
         each_task.start()
 
-    for each_task in thread_list:
+    for each_task in process_list:
         each_task.join()
     
     print '** All Process Tasks Finish! **'       

@@ -5,7 +5,7 @@
 #
 # Author:      TaoTianYi
 #
-# Created:     21/06/2014
+# Created:     2014/12/20
 # Copyright:   (c) TaoTianYi 2014
 # Licence:     <your licence>
 #-------------------------------------------------------------------------------
@@ -37,9 +37,7 @@ def main():
         target_date_list = [target_date_str]
     elif 3 == len(sys.argv):
         # 有两个参数时，取两天日期之间的数据
-        date_int_begin = int(sys.argv[1])
-        date_int_end = int(sys.argv[2])
-        target_date_list = time_func.get_day_list_between_two_datestr(date_int_begin, date_int_end)        
+        target_date_list = time_func.get_day_list_between_two_datestr(sys.argv[1], sys.argv[2])
     else:
         print "  Error Parameters: "
         for item in sys.argv:
